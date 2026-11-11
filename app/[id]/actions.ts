@@ -1,0 +1,40 @@
+'use server'
+
+import { cache } from 'react'
+import { z } from 'zod'
+import { verifyHeaderCookie } from '~/utils/actions/verifyHeaderCookie'
+import { safeParseSchema } from '~/utils/actions/safeParseSchema'
+import { getPatchPageData } from '~/app/api/patch/pageData'
+import { updatePatchViews } from '~/app/api/patch/views/put'
+
+const uniqueIdSchema = z.object({
+  uniqueId: z.string().min(8).max(8)
+})
+
+const updatePatchViewsSchema = uniqueIdSchema.extend({
+  ip: z.string().max(45).optional().default('')
+})
+
+export const kunGetPatchPageDataActions = cache(
+  async (params: z.infer<typeof uniqueIdSchema>) => {
+    const input = safeParseSchema(uniqueIdSchema, params)
+    if (typeof input === 'string') {
+      return input
+    }
+    const payload = await verifyHeaderCookie()
+
+    const response = await getPatchPageData(input, payload?.uid ?? 0)
+    return response
+  }
+)
+
+export const kunUpdatePatchViewsActions = async (
+  params: z.infer<typeof updatePatchViewsSchema>
+) => {
+  const input = safeParseSchema(updatePatchViewsSchema, params)
+  if (typeof input === 'string') {
+    return input
+  }
+
+  await updatePatchViews(input.uniqueId, input.ip)
+}

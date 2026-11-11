@@ -1,0 +1,598 @@
+.kun-prose {
+  --kun-prose-font-family:
+    system-ui, -apple-system, BlinkMacSystemFont, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --kun-prose-font-size: clamp(1.0625rem, 0.98rem + 0.2vw, 1.125rem);
+  --kun-prose-line-height: 1.9;
+  --kun-prose-image-gap: 1.75rem;
+
+  @apply text-default-800;
+  font-family: var(--kun-prose-font-family) !important;
+  font-size: var(--kun-prose-font-size);
+  line-height: var(--kun-prose-line-height);
+}
+
+/* The global reset uses !important, so article text needs its own override. */
+.kun-prose * {
+  font-family: var(--kun-prose-font-family) !important;
+}
+
+.kun-prose code,
+.kun-prose pre,
+.kun-prose kbd,
+.kun-prose samp {
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace !important;
+}
+
+/* Paragraphs */
+.kun-prose p {
+  margin: 1.35em 0;
+  line-height: inherit;
+}
+
+/* Keep text and images in a paragraph from collapsing together. */
+.kun-prose p:has(img) {
+  margin: 1.5em 0;
+}
+
+/* ===== Game detail article ===== */
+.kun-prose.kun-game-intro {
+  --kun-game-measure: 46em;
+
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0.5rem;
+  color: var(--heroui-default-700, #3f3f46);
+  font-size: 17px;
+  line-height: 2.2;
+  letter-spacing: 0.02em;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+@media (min-width: 640px) {
+  .kun-prose.kun-game-intro {
+    padding-inline: 1.5rem;
+  }
+}
+
+.dark .kun-prose.kun-game-intro {
+  color: var(--heroui-default-300, #d4d4d8);
+}
+
+.kun-prose.kun-game-intro p,
+.kun-prose.kun-game-intro ul,
+.kun-prose.kun-game-intro ol,
+.kun-prose.kun-game-intro blockquote,
+.kun-prose.kun-game-intro h1,
+.kun-prose.kun-game-intro h2,
+.kun-prose.kun-game-intro h3,
+.kun-prose.kun-game-intro h4 {
+  width: 100%;
+  max-width: var(--kun-game-measure);
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.kun-prose.kun-game-intro p {
+  margin-top: 0;
+  margin-bottom: 2.2em;
+}
+
+.kun-prose.kun-game-intro p:has(img) {
+  max-width: 100%;
+  margin: 0;
+}
+
+.kun-prose.kun-game-intro h1,
+.kun-prose.kun-game-intro h2,
+.kun-prose.kun-game-intro h3,
+.kun-prose.kun-game-intro h4 {
+  text-align: left;
+}
+
+.kun-prose.kun-game-intro img {
+  width: auto;
+  margin: 2.5rem auto;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 7%);
+}
+
+.kun-prose.kun-game-intro hr {
+  margin: 3rem 0;
+  border-color: rgb(251 207 232 / 50%);
+}
+
+/* Section labels such as `> **游戏背景**`. */
+.kun-prose.kun-game-intro blockquote.kun-section-label {
+  display: block;
+  margin: 3rem 0 2.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Mobile: no narrow justified column, and no expensive content effects. */
+@media (max-width: 639px) {
+  .kun-prose.kun-game-intro {
+    text-align: left;
+    padding-inline: 0.25rem;
+  }
+
+  .kun-prose.kun-game-intro p,
+  .kun-prose.kun-game-intro ul,
+  .kun-prose.kun-game-intro ol,
+  .kun-prose.kun-game-intro blockquote,
+  .kun-prose.kun-game-intro h1,
+  .kun-prose.kun-game-intro h2,
+  .kun-prose.kun-game-intro h3,
+  .kun-prose.kun-game-intro h4 {
+    max-width: none;
+  }
+}
+
+.kun-prose.kun-game-intro blockquote.kun-section-label p {
+  margin: 0;
+}
+
+.kun-prose.kun-game-intro blockquote.kun-section-label strong {
+  display: inline-block;
+  padding: 0.25rem 0.9rem;
+  border-radius: 0.55rem;
+  background: rgb(244 114 182 / 15%);
+  color: var(--foreground);
+  font-family: inherit !important;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  .kun-prose.kun-game-intro blockquote.kun-section-label strong {
+    font-size: 1.5rem;
+  }
+}
+
+/* Long section titles get a full-width header row. */
+.kun-prose.kun-game-intro blockquote.kun-section-label.is-long > p {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.6rem;
+}
+
+.kun-prose.kun-game-intro
+  blockquote.kun-section-label.is-long
+  .kun-section-number {
+  grid-column: 1;
+  grid-row: 1;
+  margin-right: 0;
+  padding-top: 0.35rem;
+}
+
+.kun-prose.kun-game-intro blockquote.kun-section-label.is-long strong {
+  display: block;
+  grid-column: 2;
+  width: 100%;
+  max-width: 100%;
+}
+
+.kun-prose.kun-game-intro
+  blockquote.kun-section-label.is-long
+  .kun-section-label-en {
+  display: block;
+  grid-column: 2;
+  margin-top: 0.35rem;
+  margin-left: 0;
+}
+
+.kun-prose.kun-game-intro .kun-section-heading.is-long {
+  display: block;
+  width: 100%;
+}
+
+.kun-prose.kun-game-intro .kun-section-heading.is-long + .kun-section-label-en {
+  display: block;
+  margin-top: 0.35rem;
+  margin-left: 0;
+}
+
+.kun-prose.kun-game-intro .kun-section-heading {
+  display: inline-block;
+  max-width: 100%;
+  margin: 3rem 0 2.2rem;
+  padding: 0.25rem 0.9rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: rgb(244 114 182 / 15%);
+  color: var(--foreground);
+  font-family: inherit !important;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .kun-prose.kun-game-intro .kun-section-heading {
+    font-size: 1.5rem;
+  }
+}
+
+.kun-prose.kun-game-intro .kun-section-label-en {
+  display: inline-block;
+  margin-left: 1.15rem;
+  color: #efadbd;
+  font-family: var(--kun-prose-font-family) !important;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  line-height: 1.6;
+  text-transform: uppercase;
+  vertical-align: 0.08em;
+}
+
+@media (min-width: 640px) {
+  .kun-prose.kun-game-intro .kun-section-label-en {
+    font-size: 13px;
+  }
+}
+
+.kun-prose.kun-game-intro .kun-section-label-en.is-custom {
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
+
+.kun-prose.kun-game-intro .kun-section-number {
+  display: inline-block;
+  margin-right: 0.55rem;
+  color: #c28ba0;
+  font-family: var(--kun-prose-font-family) !important;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  vertical-align: 0.12em;
+}
+
+.kun-prose.kun-game-intro .kun-section-label,
+.kun-prose.kun-game-intro .kun-section-heading {
+  scroll-margin-top: 7rem;
+}
+
+/* Wide-screen game article table of contents. */
+.kun-game-toc {
+  display: none;
+}
+
+@media (min-width: 1800px) {
+  .kun-game-toc {
+    position: fixed;
+    top: calc(50% + 1rem);
+    right: max(1.5rem, calc((100vw - 80rem) / 2 - 13.5rem));
+    z-index: 30;
+    display: block;
+    width: 12rem;
+    max-height: min(26rem, calc(100vh - 4rem));
+    overflow: hidden;
+    transform: translateY(-50%);
+    border: 1px solid rgb(244 114 182 / 24%);
+    border-radius: 1.2rem;
+    background: #fff9fb;
+    box-shadow: 0 6px 24px rgb(244 114 182 / 8%);
+  }
+}
+
+.kun-game-toc-scroll {
+  max-height: inherit;
+  overflow-y: auto;
+  padding: 1rem 0.7rem 1rem 0.85rem;
+  border-radius: inherit;
+  overscroll-behavior: contain;
+  scrollbar-color: rgb(244 114 182 / 42%) transparent;
+  scrollbar-width: thin;
+}
+
+.kun-game-toc-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kun-game-toc-scroll::-webkit-scrollbar-track {
+  margin: 0.75rem 0;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.kun-game-toc-scroll::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: linear-gradient(#f9a8d4, #f472b6);
+  background-clip: padding-box;
+}
+
+.kun-game-toc-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.dark .kun-game-toc {
+  border-color: rgb(244 114 182 / 14%);
+  background: #1c1917;
+}
+
+.kun-game-toc-heading {
+  margin: 0 0 0.7rem;
+  padding: 0 0.45rem;
+  color: #b77b92;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+}
+
+.kun-game-toc-heading::before {
+  content: '✿';
+  margin-right: 0.4rem;
+  color: #f472b6;
+  font-size: 11px;
+}
+
+.kun-game-toc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kun-game-toc-link {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.65rem;
+  color: #78616a;
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    transform 150ms ease;
+}
+
+.kun-game-toc-link:hover {
+  color: #be185d;
+  background: #fce7f3;
+  transform: translateX(1px);
+}
+
+.kun-game-toc-link[data-active='true'] {
+  color: #9f1239;
+  font-weight: 600;
+  background: #fce7f3;
+}
+
+.kun-game-toc-link[data-active='true']::after {
+  content: '♡';
+  margin-left: auto;
+  color: #f472b6;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.kun-game-toc-number {
+  flex: 0 0 auto;
+  padding-top: 0.16rem;
+  color: #c28ba0;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.kun-game-toc-text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.kun-game-toc-english {
+  color: #d3a1b1;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.kun-game-toc-link[data-active='true'] .kun-game-toc-number {
+  color: #be185d;
+}
+
+.dark .kun-game-toc-heading {
+  color: #71717a;
+}
+
+.dark .kun-game-toc-link {
+  color: #d4d4d8;
+}
+
+.dark .kun-game-toc-link:hover {
+  color: #f9a8d4;
+  background: rgb(244 114 182 / 10%);
+}
+
+.dark .kun-game-toc-link[data-active='true'] {
+  color: #f9a8d4;
+  background: rgb(244 114 182 / 14%);
+}
+
+/* Links */
+.kun-prose a {
+  @apply text-primary-500 underline decoration-primary-200 underline-offset-2 font-medium
+         transition-colors duration-200 hover:text-primary-600 hover:decoration-primary-400;
+}
+
+.kun-prose .anchor {
+  @apply text-default-800 no-underline hover:text-primary-500;
+}
+
+/* Headings with improved spacing and refined typography */
+.kun-prose h1 {
+  @apply text-default-900 font-extrabold text-4xl mt-0 mb-8 leading-tight
+         tracking-tight scroll-m-20;
+}
+
+.kun-prose h2 {
+  @apply text-default-900 font-bold text-2xl mt-14 border-t border-default-200/70
+         pt-7 mb-4 leading-tight tracking-tight scroll-m-20;
+}
+
+.kun-prose h3 {
+  @apply text-default-900 font-semibold text-xl mt-8 mb-4 leading-snug
+         tracking-tight scroll-m-20;
+}
+
+.kun-prose h4 {
+  @apply text-default-900 font-semibold text-lg mt-6 mb-4 leading-snug
+         tracking-tight scroll-m-20;
+}
+
+/* Lists with improved spacing and bullets */
+.kun-prose ul {
+  @apply my-6 list-outside list-disc pl-8 space-y-3 marker:text-default-400;
+}
+
+.kun-prose ol {
+  @apply my-6 list-outside list-decimal pl-8 space-y-3 marker:text-default-400;
+}
+
+.kun-prose li {
+  @apply mt-2;
+  line-height: inherit;
+}
+
+/* Nested lists */
+.kun-prose li > ul,
+.kun-prose li > ol {
+  @apply my-2 space-y-2;
+}
+
+/* Code blocks with improved styling */
+.kun-prose code {
+  @apply text-sm bg-default-100 px-1.5 py-0.5 rounded-md font-mono
+         text-default-800 border border-default-200;
+}
+
+.kun-prose pre {
+  @apply bg-default-100/70 rounded-2xl p-4 my-6 overflow-x-auto border border-default-200
+         ring-1 ring-default-200/50 shadow-sm;
+}
+
+.kun-prose pre code {
+  @apply bg-transparent border-0 p-0 text-default-800 shadow-none;
+}
+
+/* Quotes with refined styling */
+.kun-prose blockquote {
+  @apply border-l-4 border-primary-300 pl-6 pr-4 py-1 my-8
+         bg-primary-500/10 rounded-r-2xl font-medium text-default-800 shadow-sm;
+}
+
+/* Tables with NextUI-inspired design */
+.kun-prose table {
+  @apply w-full my-8 border border-default-200 rounded-2xl overflow-hidden
+         shadow-sm bg-content1;
+}
+
+.kun-prose thead {
+  @apply bg-default-50;
+}
+
+.kun-prose th {
+  @apply border-b border-default-200 px-4 py-3 text-left font-semibold
+         text-default-700 text-sm tracking-wide uppercase;
+}
+
+.kun-prose td {
+  @apply border-b border-default-200 px-4 py-3 text-default-600;
+}
+
+.kun-prose tr:last-child td {
+  @apply border-b-0;
+}
+
+.kun-prose tr:hover {
+  @apply bg-default-50/50 transition-colors duration-200;
+}
+
+/* Additional refinements */
+.kun-prose hr {
+  @apply my-12 border-default-200;
+}
+
+.kun-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: var(--kun-prose-image-gap) auto;
+  @apply rounded-xl shadow-lg border border-default-200;
+}
+
+.kun-comment-content img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 32rem);
+  max-height: 24rem;
+  object-fit: contain;
+  margin: 0.75rem 0;
+}
+
+.kun-comment-content p {
+  white-space: pre-line;
+}
+
+.kun-prose figure {
+  @apply my-8;
+}
+
+.kun-prose figcaption {
+  @apply text-sm text-default-500 text-center mt-3;
+}
+
+/* Definition lists */
+.kun-prose dt {
+  @apply font-semibold text-default-900 mt-4;
+}
+
+.kun-prose dd {
+  @apply mt-2 pl-4 border-l-2 border-default-200;
+}
+
+/* Keyboard shortcuts */
+.kun-prose kbd {
+  @apply px-2 py-1 text-sm font-mono bg-default-100 border border-default-300
+         rounded shadow-sm text-default-700;
+}
+
+/* Mark text */
+.kun-prose mark {
+  @apply bg-warning-100 text-warning-800 px-1 rounded;
+}
+
+/* styles for custom screenshot img container */
+.data-kun-img-container {
+  @apply grid lg:grid-cols-3 md:grid-cols-2 gap-3 grid-cols-1;
+}
+
+.data-kun-img-container img,
+.data-kun-img-container p {
+  margin: 0;
+}

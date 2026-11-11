@@ -1,0 +1,14 @@
+// prisma/schema/kiriko_achievement.prisma
+
+model kiriko_achievement {
+  id String @id @default(cuid())
+
+  user_id Int
+  user    user @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  achievement_id String // 'secret_first_chat', 'aff_6', etc.
+  unlocked_at    DateTime @default(now())
+
+  @@unique([user_id, achievement_id])
+  @@index([user_id])
+}

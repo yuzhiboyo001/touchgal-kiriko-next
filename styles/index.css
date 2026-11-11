@@ -1,0 +1,310 @@
+@import './tailwind.css';
+@import './blog.css';
+@import './prose.css';
+@import './editor.css';
+
+/* ============================================================
+   基础重置
+   ============================================================ */
+[data-overlay-container='true'] {
+  height: 100%;
+  width: 100%;
+}
+
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  cursor: default;
+}
+
+/* 可点击的图片仍然保留手型 */
+a img,
+button img,
+[role='button'] img {
+  cursor: pointer;
+}
+
+.yarl__container img {
+  -webkit-user-drag: auto;
+  user-drag: auto;
+}
+
+* {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    PingFang SC,
+    Hiragino Sans GB,
+    Microsoft YaHei,
+    sans-serif !important;
+}
+
+/* ============================================================
+   🎮 主题 CSS 变量
+   ============================================================ */
+:root {
+  /* 贴纸颜色 */
+  --gal-sticker-color: #2a1f1a;
+  --gal-sticker-hover: #4a3a3a;
+  --gal-sticker-border: rgba(212, 160, 168, 0.2);
+  --gal-sticker-border-hover: rgba(212, 160, 168, 0.35);
+  --gal-sticker-bg: rgba(255, 255, 255, 0.08);
+  --gal-sticker-bg-hover: rgba(212, 160, 168, 0.12);
+
+  /* 边框 & 纹理 */
+  --gal-border-color: rgba(200, 180, 180, 0.12);
+  --gal-texture-color: rgba(200, 180, 180, 0.015);
+  --gal-glow-color: rgba(255, 200, 210, 0.08);
+}
+
+.dark,
+[data-theme='dark'] {
+  --gal-sticker-color: #f0e6d3;
+  --gal-sticker-hover: #ffffff;
+  --gal-sticker-border: rgba(255, 255, 255, 0.15);
+  --gal-sticker-border-hover: rgba(255, 255, 255, 0.3);
+  --gal-sticker-bg: rgba(255, 255, 255, 0.06);
+  --gal-sticker-bg-hover: rgba(255, 255, 255, 0.12);
+  --gal-border-color: rgba(255, 255, 255, 0.06);
+  --gal-texture-color: rgba(255, 255, 255, 0.02);
+  --gal-glow-color: rgba(255, 200, 210, 0.05);
+}
+
+/* ============================================================
+   🎮 Galgame 背景
+   ============================================================ */
+body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* ============================================================
+   🎮 贴纸按钮
+   ============================================================ */
+@layer components {
+  .gal-sticker {
+    @apply inline-block px-8 py-3 rounded-2xl
+           text-sm tracking-wider
+           transition-all duration-300 ease-out
+           cursor-pointer select-none;
+    font-weight: 500;
+    border: 1px solid var(--gal-sticker-border) !important;
+    background: var(--gal-sticker-bg) !important;
+    backdrop-filter: blur(4px) !important;
+    color: var(--gal-sticker-color) !important;
+    -webkit-text-fill-color: var(--gal-sticker-color) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04) !important;
+  }
+
+  .gal-sticker:hover {
+    transform: scale(1.05) translateY(-2px);
+    background: var(--gal-sticker-bg-hover) !important;
+    border-color: var(--gal-sticker-border-hover) !important;
+    box-shadow: 0 8px 30px rgba(212, 160, 168, 0.15) !important;
+  }
+
+  .gal-sticker:active {
+    transform: scale(0.95) translateY(0);
+  }
+
+  /* 粉色贴纸（强调） */
+  .gal-sticker-pink {
+    border-color: rgba(236, 72, 153, 0.25) !important;
+    background: rgba(236, 72, 153, 0.08) !important;
+    color: #ec4899 !important;
+    -webkit-text-fill-color: #ec4899 !important;
+  }
+
+  .gal-sticker-pink:hover {
+    background: rgba(236, 72, 153, 0.15) !important;
+    border-color: rgba(236, 72, 153, 0.4) !important;
+    box-shadow: 0 8px 30px rgba(236, 72, 153, 0.2) !important;
+  }
+
+  /* 透明贴纸 */
+  .gal-sticker-clear {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  .gal-sticker-clear:hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* 白色贴纸（深色背景用） */
+  .gal-sticker-white {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #1a1a1a !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+  }
+
+  .gal-sticker-white:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  /* 尺寸变体 */
+  .gal-sticker-sm {
+    @apply px-4 py-1.5 text-xs rounded-xl;
+  }
+
+  .gal-sticker-lg {
+    @apply px-10 py-4 text-base rounded-3xl;
+  }
+
+  /* 带装饰线 */
+  .gal-sticker-deco {
+    @apply relative overflow-visible;
+  }
+
+  .gal-sticker-deco::before {
+    content: '';
+    @apply absolute -top-px left-1/2 -translate-x-1/2
+           w-2/5 h-0.5
+           bg-linear-to-r from-transparent via-white/30 to-transparent
+           rounded-full;
+  }
+
+  /* 带光效 */
+  .gal-sticker-glow {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.08) !important;
+  }
+
+  .gal-sticker-glow:hover {
+    box-shadow: 0 0 50px rgba(236, 72, 153, 0.15) !important;
+  }
+}
+
+/* ============================================================
+   🎮 日文文字格式
+   ============================================================ */
+@layer components {
+  .font-ja {
+    font-family:
+      'Zen Maru Gothic', 'Noto Sans JP', 'PingFang SC', 'Microsoft YaHei', serif !important;
+    letter-spacing: 0.06em;
+  }
+
+  .font-ja-maru {
+    font-family:
+      'Zen Maru Gothic', 'Noto Sans JP', 'PingFang SC', 'Microsoft YaHei', serif !important;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+  }
+
+  .font-ja-serif {
+    font-family:
+      'Noto Serif JP', 'Zen Maru Gothic', 'PingFang SC', 'Microsoft YaHei',
+      serif !important;
+    letter-spacing: 0.05em;
+    font-weight: 300;
+  }
+}
+/* ============================================================
+   💬 滚动条样式（统一通用类）
+   ============================================================ */
+.gal-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  border-radius: 4px;
+}
+.gal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+.gal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.gal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+.gal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05);
+}
+/* ============================================================
+   💬 每日任务：横向滑动滚动条
+   ============================================================ */
+.custom-horizontal-scrollbar::-webkit-scrollbar {
+  height: 6px; /* ✅ 横向滚动条的高度，比竖向的粗一点才看得清 */
+  display: block;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  /* 让滚动条左右两端和卡片对齐，不会顶到最边缘 */
+  margin: 0 24px;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.4); /* 粉色滑块 */
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.custom-horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.8); /* 鼠标放上去变亮 */
+}
+
+/* 在手机端隐藏这个横向滚动条，因为手机上直接用手滑动不需要条 */
+@media (max-width: 768px) {
+  .custom-horizontal-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .custom-horizontal-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+/* ============================================================
+   🎮 强调色工具类
+   ============================================================ */
+@layer components {
+  /* 主要按钮 - 玫粉色 */
+  .gal-btn-primary {
+    @apply inline-block px-6 py-2.5 rounded-full text-white font-medium
+           transition-all duration-300 ease-out cursor-pointer;
+    background: #ec4899 !important;
+    border: none !important;
+  }
+
+  .gal-btn-primary:hover {
+    background: #db2777 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+  }
+
+  /* 次要按钮 - 浅紫色 */
+  .gal-btn-secondary {
+    @apply inline-block px-6 py-2.5 rounded-full font-medium
+           transition-all duration-300 ease-out cursor-pointer;
+    background: rgba(168, 85, 247, 0.12) !important;
+    color: #a855f7 !important;
+    border: 1px solid rgba(168, 85, 247, 0.2) !important;
+  }
+
+  .gal-btn-secondary:hover {
+    background: rgba(168, 85, 247, 0.2) !important;
+    transform: translateY(-2px);
+  }
+
+  /* 链接 - 浅蓝色 */
+  .gal-link {
+    color: #60a5fa !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+    cursor: pointer !important;
+  }
+
+  .gal-link:hover {
+    color: #3b82f6 !important;
+    text-decoration: underline !important;
+  }
+}

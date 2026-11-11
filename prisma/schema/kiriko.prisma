@@ -1,0 +1,30 @@
+// ===== 看板娘用户数据 =====
+model kiriko_profile {
+  id      String @id @default(cuid())
+  user_id Int    @unique
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  character String @db.VarChar(20) // 'rin' | 'sayo' | 'shunv'
+
+  // 好感度系统
+  affection       Int @default(0) // 0-无限
+  affection_level Int @default(1) // 1-10 级
+
+  // 货币系统
+  coins Int @default(0) // 看板娘专属金币
+
+  // 互动统计（认识天数由 first_chat_at 实时计算，不再冗余存储）
+  last_chat_at  DateTime @default(now())
+  first_chat_at DateTime @default(now())
+
+  last_chat_date DateTime? // 最后聊天日期（只记日期）
+  chat_streak    Int       @default(0) // 连续聊天天数
+
+  //用户购买记录（JSON 存储）
+  purchase_history Json? // 存储购买记录
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([user_id, character])
+}

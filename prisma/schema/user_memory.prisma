@@ -1,0 +1,44 @@
+// ===== 对话历史日志 =====
+model conversation_log {
+  id      String @id @default(cuid())
+  user_id Int
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  character String @db.VarChar(20)
+  role      String @db.VarChar(10)
+  content   String @db.Text
+
+  turn_number   Int     @default(0)
+  is_summarized Boolean @default(false)
+  memory_id     String?
+
+  created_at DateTime @default(now())
+
+  @@index([user_id, character, is_summarized])
+  @@index([user_id, character, turn_number])
+}
+
+// ===== 大脑记忆 =====
+model brain_memory {
+  id      String @id @default(cuid())
+  user_id Int
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  character String @db.VarChar(20)
+  content   String @db.Text
+  type      String @default("episode") @db.VarChar(20)
+  slot      String? @db.VarChar(40)
+  source_turn Int?
+  evidence  String? @db.Text
+  status    String? @db.VarChar(20)
+
+  is_active Boolean @default(true)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, character, slot])
+  @@index([user_id, character, is_active])
+  @@index([user_id, character, type])
+  @@index([user_id, character, created_at])
+}

@@ -1,0 +1,132 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Button, Card, CardBody, Image, useDisclosure } from '@heroui/react'
+import { KunImageUploader } from './KunImageUploader'
+import { KunImageCropperModal } from './KunImageCropperModal'
+import { KunImageMosaicModal } from './KunImageMosaicModal'
+import type { KunAspect } from './types'
+
+interface Props {
+  aspect?: KunAspect
+  initialImage?: string
+  description?: string
+  onImageComplete?: (croppedImage: string) => void
+  onOriginalImageComplete?: (originalImage: string) => void
+  removeImage?: () => void
+}
+
+export const KunImageCropper = ({
+  aspect,
+  initialImage,
+  description,
+  onImageComplete,
+  onOriginalImageComplete,
+  removeImage
+}: Props) => {
+  const [imgSrc, setImgSrc] = useState(initialImage ?? '')
+  const [previewImage, setPreviewImage] = useState<string>(initialImage ?? '')
+  const {
+    isOpen: isOpenCropper,
+    onOpen: onOpenCropper,
+    onClose: onCloseCropper
+  } = useDisclosure()
+  const {
+    isOpen: isOpenMosaic,
+    onOpen: onOpenMosaic,
+    onClose: onCloseMosaic
+  } = useDisclosure()
+
+  useEffect(() => {
+    if (!initialImage) return
+
+    const timer = setTimeout(() => {
+      setImgSrc(initialImage)
+      setPreviewImage(initialImage)
+    }, 0)
+
+    return () => clearTimeout(timer)
+  }, [initialImage])
+
+  const handleCropComplete = (image: string) => {
+    setImgSrc(image)
+    setPreviewImage(image)
+    onImageComplete?.(image)
+  }
+
+  const handleMosaicComplete = (mosaicImage: string) => {
+    setImgSrc(mosaicImage)
+    setPreviewImage(mosaicImage)
+    onImageComplete?.(mosaicImage)
+  }
+
+  const handleRemoveImage = () => {
+    setPreviewImage('')
+    setImgSrc('')
+    removeImage?.()
+  }
+
+  return (
+    <div className="gap-6 size-full">
+      <KunImageUploader
+        onImageSelect={(dataUrl: string) => {
+          setImgSrc(dataUrl)
+          onOpenCropper()
+        }}
+      />
+
+      {previewImage && (
+        <Card className="w-full max-w-md mx-auto">
+          <CardBody>
+            <Image
+              src={previewImage}
+              alt="Cropped image"
+              className="object-contain w-full h-auto"
+            />
+
+            <Button
+              color="primary"
+              variant="bordered"
+              size="sm"
+              className="absolute z-10  border-pink-400 bg-pink-400/40 text-white/70"
+              onPress={() => {
+                setImgSrc(previewImage)
+                onOpenCropper()
+              }}
+            >
+              重新裁剪
+            </Button>
+
+            <Button
+              color="primary"
+              variant="bordered"
+              size="sm"
+              className="absolute z-10 right-2 top-2  border-pink-400 bg-pink-400/40 text-white/70"
+              onPress={handleRemoveImage}
+            >
+              移除
+            </Button>
+          </CardBody>
+        </Card>
+      )}
+
+      <KunImageCropperModal
+        isOpen={isOpenCropper}
+        imgSrc={imgSrc}
+        initialAspect={aspect}
+        description={description}
+        onCropComplete={handleCropComplete}
+        onOriginalImageComplete={onOriginalImageComplete}
+        onOpenMosaic={onOpenMosaic}
+        onClose={onCloseCropper}
+      />
+
+      <KunImageMosaicModal
+        isOpen={isOpenMosaic}
+        imgSrc={imgSrc}
+        onMosaicComplete={handleMosaicComplete}
+        onClose={onCloseMosaic}
+      />
+    </div>
+  )
+}

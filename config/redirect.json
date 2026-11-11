@@ -1,0 +1,13 @@
+{
+  "enableRedirect": true,
+  "excludedDomains": [
+    "kiriko.ink",
+    "kungal.com",
+    "x.com",
+    "twitter.com",
+    "discord.gg",
+    "t.me",
+    "telegram.me"
+  ],
+  "delaySeconds": 5
+}

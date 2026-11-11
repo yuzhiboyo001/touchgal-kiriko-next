@@ -1,0 +1,78 @@
+model patch_resource {
+  id       Int      @id @default(autoincrement())
+  section  String   @db.VarChar(107)
+  name     String   @default("") @db.VarChar(300)
+  note     String   @default("") @db.VarChar(10007)
+  type     String[]
+  language String[]
+  platform String[]
+  download Int      @default(0)
+  // 0 - normal, 1 - banned, 2 - pending approval
+  status   Int      @default(0)
+  // 发布时的官方快照：role >= 3 的资源进入官方区并参与自动检查。
+  // 不用 user.role 动态判断，避免用户降级后资源和检查范围突然变化。
+  is_official Boolean @default(false)
+
+  like_by user_patch_resource_like_relation[]
+  links   patch_resource_link[]
+
+  user_id  Int
+  user     user  @relation("user_patch_resource", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  patch_id Int
+  patch    patch @relation("patch_resource", fields: [patch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  @@index([patch_id])
+  @@index([section, status, created(sort: Desc)])
+  @@index([is_official, status])
+}
+
+model patch_resource_link {
+  id         Int    @id @default(autoincrement())
+  storage    String @db.VarChar(107)
+  size       String @default("") @db.VarChar(107)
+  code       String @default("") @db.VarChar(1007)
+  password   String @default("") @db.VarChar(1007)
+  hash       String @default("")
+  s3_key     String @default("") @db.VarChar(2048)
+  content    String @default("")
+  sort_order Int    @default(0)
+  download   Int    @default(0)
+
+  // 链接健康状态：active / dead / expired / password_required /
+  // password_error / rate_limited / unknown
+  health_status   String    @default("unknown") @db.VarChar(32)
+  last_checked_at DateTime?
+  last_ok_at      DateTime?
+  check_errno     Int?
+  check_message   String    @default("") @db.VarChar(1007)
+  remote_md5      String    @default("") @db.VarChar(64)
+  remote_size     String    @default("") @db.VarChar(64)
+  fail_count      Int       @default(0)
+  replaced_by     Int?
+
+  resource_id Int
+  resource    patch_resource @relation(fields: [resource_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  @@index([resource_id, sort_order])
+  @@index([health_status, last_checked_at])
+}
+
+model user_patch_resource_like_relation {
+  id Int @id @default(autoincrement())
+
+  user_id     Int
+  user        user           @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  resource_id Int
+  resource    patch_resource @relation(fields: [resource_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  created DateTime @default(now())
+  updated DateTime @updatedAt
+
+  @@unique([user_id, resource_id])
+}

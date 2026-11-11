@@ -1,0 +1,88 @@
+import { SUPPORTED_TYPE_MAP } from '~/constants/resource'
+import type { KunSiteConfig } from './config'
+
+const KUN_SITE_NAME = 'Kiriko'
+const KUN_SITE_MENTION = '@galgame_gzwz'
+const KUN_SITE_TITLE = 'Kiriko - Galgame 游戏资料与社区'
+const KUN_SITE_IMAGE =
+  'https://img.kiriko.ink/kun/logo/kiriko-square.avif'
+const KUN_SITE_DESCRIPTION =
+  'Kiriko 是一个一站式 Galgame 文化社区，提供 Galgame 游戏资料、评测、资源、论坛与玩家交流。'
+const KUN_SITE_URL = 'https://kiriko.ink'
+const KUN_SITE_ARCHIVE = 'https://archive.touchgal.co/'
+const KUN_SITE_FORUM = 'https://bbs.touchgal.co/'
+const KUN_SITE_NAV = 'https://gal.red'
+const KUN_SITE_TELEGRAM_GROUP = 'https://s.miku.cyou/2'
+const KUN_SITE_DISCORD_GROUP = 'https://discord.gg/e4QePvPQTB'
+const KUN_SITE_LIST = [{ name: KUN_SITE_NAME, url: KUN_SITE_URL }]
+const KUN_SITE_KEYWORDS = [
+  'Kiriko',
+  'Kiriko Galgame',
+  'kiriko.ink',
+  'Gal',
+  'Galgame',
+  'Galgame 社区',
+  '论坛',
+  '网站',
+  'Galgame 下载',
+  'Galgame 资源',
+  'Galgame wiki',
+  'Galgame 评测',
+  'Galgame 数据分析',
+  'Galgame 新作动态',
+  'Galgame 汉化 / 国际化',
+  'Galgame 制作',
+  'Galgame 讨论',
+  '游戏交流',
+  '其他交流',
+  ...Object.values(SUPPORTED_TYPE_MAP)
+]
+
+export const kunMoyuMoe: KunSiteConfig = {
+  title: KUN_SITE_TITLE,
+  titleShort: KUN_SITE_NAME,
+  template: `%s - ${KUN_SITE_NAME}`,
+  description: KUN_SITE_DESCRIPTION,
+  keywords: KUN_SITE_KEYWORDS,
+  canonical: KUN_SITE_URL,
+  author: [
+    { name: KUN_SITE_TITLE, url: KUN_SITE_URL },
+    { name: KUN_SITE_NAME, url: KUN_SITE_NAV },
+    ...KUN_SITE_LIST
+  ],
+  creator: {
+    name: KUN_SITE_NAME,
+    mention: KUN_SITE_MENTION,
+    url: KUN_SITE_URL
+  },
+  publisher: {
+    name: KUN_SITE_NAME,
+    mention: KUN_SITE_MENTION,
+    url: KUN_SITE_URL
+  },
+  domain: {
+    main: KUN_SITE_URL,
+    imageBed: 'https://cloud.touchgaloss.com',
+    storage: KUN_SITE_URL,
+    kungal: KUN_SITE_URL,
+    telegram_group: KUN_SITE_TELEGRAM_GROUP,
+    discord_group: KUN_SITE_DISCORD_GROUP,
+    archive: KUN_SITE_ARCHIVE,
+    forum: KUN_SITE_FORUM,
+    nav: KUN_SITE_NAV
+  },
+  og: {
+    title: KUN_SITE_TITLE,
+    description: KUN_SITE_DESCRIPTION,
+    image: KUN_SITE_IMAGE,
+    url: KUN_SITE_URL
+  },
+  images: [
+    {
+      url: KUN_SITE_IMAGE,
+      width: 1024,
+      height: 1024,
+      alt: KUN_SITE_TITLE
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+[
+  {
+    "thinking": false,
+    "ok": true,
+    "elapsed": 3.02,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫",
+      "做游戏汉化",
+      "小时候和奶奶一起住，奶奶去年走了",
+      "喜欢喝柠檬茶，也喜欢味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.tokyo_night"
+    ],
+    "promises": [
+      "下周末一起去附近的书店",
+      "找一天一起去看晚上的东京"
+    ],
+    "episode_count": 2,
+    "relationship": "便利店的熟客，约好下周末一起去书店，还想找一天一起看晚上的东京，具体时间等我排班",
+    "trial": 1
+  },
+  {
+    "thinking": false,
+    "ok": true,
+    "elapsed": 2.87,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫",
+      "做游戏汉化",
+      "小时候和奶奶一起住，奶奶去年去世了",
+      "喜欢喝柠檬茶，也喜欢味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.tokyo_night"
+    ],
+    "promises": [
+      "下周末一起去附近的书店，具体时间等排班确定",
+      "找一天一起去看晚上的东京，等我排班出来再定日子"
+    ],
+    "episode_count": 2,
+    "relationship": "便利店的客人，聊过几次，约好下周末一起去书店，还想找一天一起看晚上的东京，具体时间等我排班",
+    "trial": 2
+  },
+  {
+    "thinking": false,
+    "ok": true,
+    "elapsed": 2.43,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫",
+      "做游戏汉化",
+      "小时候和奶奶一起住，奶奶去年走了",
+      "喜欢柠檬茶和味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.tokyo_night"
+    ],
+    "promises": [
+      "下周末一起去附近的书店，具体时间等排班",
+      "找一天一起去看晚上的东京，等排班出来再定"
+    ],
+    "episode_count": 2,
+    "relationship": "便利店的熟客，约好下周末一起去书店，还想找一天一起看晚上的东京",
+    "trial": 3
+  },
+  {
+    "thinking": true,
+    "ok": true,
+    "elapsed": 8.54,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫",
+      "做游戏汉化，常为一句译文改到凌晨",
+      "小时候和奶奶一起住，奶奶去年走了",
+      "喜欢柠檬茶和味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.nighttokyo"
+    ],
+    "promises": [
+      "下周末一起去附近的书店，具体时间等排班确定",
+      "另找一天一起看晚上的东京，等排班后定日子"
+    ],
+    "episode_count": 1,
+    "relationship": "在便利店认识的客人，已答应排班确定后一起去书店和看夜晚的东京。",
+    "trial": 1
+  },
+  {
+    "thinking": true,
+    "ok": true,
+    "elapsed": 20.15,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫",
+      "做游戏汉化",
+      "小时候和奶奶一起住，奶奶去年走了",
+      "喜欢喝柠檬茶和味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.tokyo_night"
+    ],
+    "promises": [
+      "下周末一起去附近的书店，具体时间等排班确定",
+      "找一天一起去看夜晚的东京，等排班出来再定日子"
+    ],
+    "episode_count": 3,
+    "relationship": "刚认识，愿意再见面，但还在互相了解。",
+    "trial": 2
+  },
+  {
+    "thinking": true,
+    "ok": true,
+    "elapsed": 4.41,
+    "core_slots": [
+      "identity.pet",
+      "work.job",
+      "family.key",
+      "preference.food"
+    ],
+    "core": [
+      "养了一只叫小黑的猫，总趴在他键盘上",
+      "做游戏汉化，经常为一句译文改到凌晨",
+      "小时候和奶奶一起住，奶奶去年走了",
+      "喜欢喝柠檬茶，也喜欢味噌拉面"
+    ],
+    "promise_slots": [
+      "promise.bookstore",
+      "promise.nighttokyo"
+    ],
+    "promises": [
+      "下周末一起去附近的书店，具体时间等我排班后确定",
+      "找一天一起去看晚上的东京，等我排班出来再定日子"
+    ],
+    "episode_count": 2,
+    "relationship": "第一次来店里就和我聊了很久的客人；已经约好一起去书店和看晚上的东京，具体日子等我排班出来再定",
+    "trial": 3
+  }
+]

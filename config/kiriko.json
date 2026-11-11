@@ -1,0 +1,32 @@
+{
+  "chat": {
+    "dailyLimit": 10,
+    "adminDailyLimit": 50,
+    "donorDailyLimit": 30,
+    "initialHistory": 30,
+    "historyPageSize": 30,
+    "historyContextMessages": 20,
+    "chatRateLimitPerMinute": 30,
+    "brainRateLimitPerMinute": 10
+  },
+  "memory": {
+    "maxTotal": 12,
+    "maxCore": 5,
+    "maxPromise": 2,
+    "maxEpisode": 4,
+    "maxContentLength": 1000,
+    "extractIntervalTurns": 10
+  },
+  "crawler": {
+    "maxRank": 100,
+    "maxRounds": 2,
+    "imageMaxBytes": 5242880,
+    "intervals": {
+      "daily": 3600,
+      "weekly": 10800,
+      "monthly": 86400,
+      "yearly": 604800,
+      "total": 604800
+    }
+  }
+}

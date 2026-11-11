@@ -1,0 +1,44 @@
+'use server'
+
+import { getRedirectConfig } from '~/app/api/admin/setting/redirect/getRedirectConfig'
+import { getDisableRegisterStatus } from '~/app/api/admin/setting/register/service'
+import { getFeatureAccess } from '~/lib/featureAccess'
+import { verifyHeaderCookie } from '~/utils/actions/verifyHeaderCookie'
+
+export const kunGetRedirectConfigActions = async () => {
+  const payload = await verifyHeaderCookie()
+  if (!payload) {
+    return '用户登陆失效'
+  }
+  if (payload.role < 4) {
+    return '本页面仅超级管理员可访问'
+  }
+
+  const response = await getRedirectConfig()
+  return response
+}
+
+export const kunGetDisableRegisterStatusActions = async () => {
+  const payload = await verifyHeaderCookie()
+  if (!payload) {
+    return '用户登陆失效'
+  }
+  if (payload.role < 4) {
+    return '本页面仅超级管理员可访问'
+  }
+
+  const response = await getDisableRegisterStatus()
+  return response
+}
+
+export const kunGetFeatureAccessActions = async () => {
+  const payload = await verifyHeaderCookie()
+  if (!payload) {
+    return '用户登陆失效'
+  }
+  if (payload.role < 4) {
+    return '本页面仅超级管理员可访问'
+  }
+
+  return await getFeatureAccess()
+}

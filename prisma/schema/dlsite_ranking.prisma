@@ -1,0 +1,49 @@
+model dlsite_ranking {
+  id            Int      @id @default(autoincrement())
+  ranking_type  String
+  rank          Int
+  rj_id         String
+  title         String
+  company       String?
+  release_date  String?
+  cover_url     String?
+  cover_local   String?
+  rating        String?
+  dl_count      String?
+  work_url      String?
+  tags          String?
+  crawled_at    DateTime @default(now())
+
+  @@unique([ranking_type, rj_id])
+  @@index([ranking_type, rank])
+  @@index([rj_id])
+}
+
+model crawl_audit_log {
+  id           Int      @id @default(autoincrement())
+  ranking_type String
+  status       String
+  count        Int      @default(0)
+  error        String?
+  trigger_source String @default("internal")
+  started_at   DateTime
+  finished_at  DateTime?
+  duration_ms  Int?
+  created_at   DateTime @default(now())
+
+  @@index([ranking_type, created_at])
+  @@map("crawl_audit_log")
+}
+
+model crawl_state {
+  ranking_type    String   @id
+  interval_sec    Int
+  last_crawl_at   DateTime @default(now())
+  next_crawl_at   DateTime
+  last_status     String   @default("success")   // success / failed
+  last_count      Int      @default(0)
+  last_error      String?
+  updated_at      DateTime @updatedAt
+
+  @@map("crawl_state")
+}

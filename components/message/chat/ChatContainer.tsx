@@ -1,0 +1,367 @@
+'use client'
+
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { Card, CardBody, CardHeader } from '@heroui/card'
+import { Button } from '@heroui/react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { KunNull } from '~/components/kun/Null'
+import { ChatMessage } from './ChatMessage'
+import { ChatInput } from './ChatInput'
+import { DeleteConversationButton } from './DeleteConversationButton'
+import { KunAvatar } from '~/components/kun/floating-card/KunAvatar'
+import { kunFetchGet, kunFetchPut } from '~/utils/kunFetch'
+import { useUserStore } from '~/store/userStore'
+import { useMessageStore } from '~/store/messageStore'
+import toast from 'react-hot-toast'
+import type { PrivateMessage } from '~/types/api/conversation'
+import type { MessageUnreadStatus } from '~/types/api/message'
+
+type MessageUpdateData =
+  | { action: 'delete' }
+  | { action: 'edit'; content: string; editedAt: string | Date }
+
+interface Props {
+  conversationId: number
+  initialMessages: PrivateMessage[]
+  total: number
+  otherUser: KunUser
+}
+
+const sortMessagesByTime = (msgs: PrivateMessage[]) => {
+  return [...msgs].sort(
+    (a, b) => new Date(a.created).getTime() - new Date(b.created).getTime()
+  )
+}
+
+export const ChatContainer = ({
+  conversationId,
+  initialMessages,
+  total,
+  otherUser
+}: Props) => {
+  const [messages, setMessages] = useState<PrivateMessage[]>(
+    sortMessagesByTime(initialMessages)
+  )
+  const [loading, setLoading] = useState(false)
+  const [hasMore, setHasMore] = useState(initialMessages.length < total)
+  const [page, setPage] = useState(1)
+  const [totalCount, setTotalCount] = useState(total)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const loadMoreRef = useRef<HTMLDivElement>(null)
+  const user = useUserStore((state) => state.user)
+  const setUnreadMessageStatus = useMessageStore(
+    (state) => state.setUnreadMessageStatus
+  )
+  const isInitialMount = useRef(true)
+
+  const lastOwnMessageId = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      const message = messages[i]
+      if (message.sender.id === user.uid && !message.isDeleted) {
+        return message.id
+      }
+    }
+    return null
+  }, [messages, user.uid])
+
+  const scrollToBottom = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
+  }, [])
+
+  const isNearBottom = useCallback(() => {
+    const container = scrollContainerRef.current
+    if (!container) {
+      return true
+    }
+    return (
+      container.scrollHeight - container.scrollTop - container.clientHeight <
+      120
+    )
+  }, [])
+
+  const markAsRead = useCallback(async () => {
+    const response = await kunFetchPut<KunResponse<MessageUnreadStatus>>(
+      `/message/conversation/${conversationId}/read`
+    )
+    if (typeof response !== 'string') {
+      setUnreadMessageStatus(response)
+    }
+  }, [conversationId, setUnreadMessageStatus])
+
+  const loadMoreMessages = useCallback(async () => {
+    if (loading || !hasMore) return
+
+    setLoading(true)
+    const nextPage = page + 1
+
+    const response = await kunFetchGet<
+      KunResponse<{
+        messages: PrivateMessage[]
+        total: number
+        otherUser: KunUser
+      }>
+    >(`/message/conversation/${conversationId}`, {
+      page: nextPage,
+      limit: 30
+    })
+
+    if (typeof response === 'string') {
+      toast.error(response)
+    } else {
+      const scrollContainer = scrollContainerRef.current
+      const previousScrollHeight = scrollContainer?.scrollHeight || 0
+
+      setMessages((prev) => {
+        const newMessages = [...response.messages, ...prev]
+        return sortMessagesByTime(newMessages)
+      })
+      setPage(nextPage)
+      setTotalCount(response.total)
+      setHasMore((page + 1) * 30 < response.total)
+
+      requestAnimationFrame(() => {
+        if (scrollContainer) {
+          const newScrollHeight = scrollContainer.scrollHeight
+          scrollContainer.scrollTop = newScrollHeight - previousScrollHeight
+        }
+      })
+    }
+
+    setLoading(false)
+  }, [loading, hasMore, page, conversationId])
+
+  const pollMessages = useCallback(async () => {
+    if (document.visibilityState === 'hidden') {
+      return
+    }
+
+    const response = await kunFetchGet<
+      KunResponse<{
+        messages: PrivateMessage[]
+        total: number
+        otherUser: KunUser
+      }>
+    >(`/message/conversation/${conversationId}`, {
+      page: 1,
+      limit: 30
+    })
+
+    if (typeof response === 'string') {
+      return
+    }
+
+    const stayAtBottom = isNearBottom()
+
+    setMessages((prev) => {
+      const merged = new Map(prev.map((message) => [message.id, message]))
+      for (const message of response.messages) {
+        merged.set(message.id, message)
+      }
+      return sortMessagesByTime([...merged.values()])
+    })
+    setTotalCount(response.total)
+
+    const hasNewIncoming = response.messages.some(
+      (message) => message.sender.id !== user.uid && message.status === 0
+    )
+    if (hasNewIncoming) {
+      await markAsRead()
+    }
+
+    if (stayAtBottom) {
+      requestAnimationFrame(() => scrollToBottom())
+    }
+  }, [conversationId, isNearBottom, markAsRead, scrollToBottom, user.uid])
+
+  const handleMessageSent = useCallback(
+    (newMessage: { id: number; content: string; created: string }) => {
+      const message: PrivateMessage = {
+        id: newMessage.id,
+        content: newMessage.content,
+        status: 0,
+        isDeleted: false,
+        editedAt: null,
+        created: newMessage.created,
+        sender: {
+          id: user.uid,
+          name: user.name,
+          avatar: user.avatar
+        }
+      }
+      setMessages((prev) => sortMessagesByTime([...prev, message]))
+      setTotalCount((prev) => prev + 1)
+      requestAnimationFrame(() => {
+        scrollToBottom()
+      })
+    },
+    [user, scrollToBottom]
+  )
+
+  const handleMessageUpdated = useCallback(
+    (messageId: number, data: MessageUpdateData) => {
+      if (data.action === 'delete') {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId ? { ...msg, isDeleted: true } : msg
+          )
+        )
+      } else {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === messageId
+              ? { ...msg, content: data.content, editedAt: data.editedAt }
+              : msg
+          )
+        )
+      }
+    },
+    []
+  )
+
+  useEffect(() => {
+    document.title = `与${otherUser.name}的私聊 - TouchGal`
+  }, [otherUser.name])
+
+  useEffect(() => {
+    void markAsRead()
+  }, [markAsRead])
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setInterval> | null = null
+
+    const tick = () => {
+      if (document.visibilityState === 'hidden') {
+        return
+      }
+      void pollMessages()
+    }
+
+    const start = () => {
+      if (!timer) {
+        timer = setInterval(tick, 8000)
+      }
+    }
+
+    const stop = () => {
+      if (timer) {
+        clearInterval(timer)
+        timer = null
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        stop()
+      } else {
+        start()
+        void pollMessages()
+      }
+    }
+
+    start()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      stop()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [pollMessages])
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      scrollToBottom()
+    }
+  }, [scrollToBottom])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMoreMessages()
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [hasMore, loading, loadMoreMessages])
+
+  return (
+    <Card className="h-[calc(100vh-200px)] min-h-[500px]">
+      <CardHeader className="border-b border-default-200 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Button
+            as={Link}
+            href="/message/chat"
+            variant="light"
+            isIconOnly
+            size="sm"
+          >
+            <ArrowLeft className="size-4" />
+          </Button>
+          <KunAvatar
+            uid={otherUser.id}
+            avatarProps={{
+              src: otherUser.avatar,
+              name: otherUser.name,
+              size: 'sm'
+            }}
+          />
+          <span className="font-semibold">{otherUser.name}</span>
+        </div>
+
+        <DeleteConversationButton
+          conversationId={conversationId}
+          otherUserName={otherUser.name}
+        />
+      </CardHeader>
+
+      <CardBody className="flex flex-col p-0">
+        <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-4">
+          {hasMore && (
+            <div ref={loadMoreRef} className="flex justify-center py-2">
+              {loading && (
+                <Loader2 className="size-5 animate-spin text-default-400" />
+              )}
+            </div>
+          )}
+
+          {messages.length === 0 ? (
+            <KunNull message="暂无消息，发送第一条消息吧" />
+          ) : (
+            <>
+              {messages.map((msg) => (
+                <ChatMessage
+                  key={msg.id}
+                  message={msg}
+                  isOwn={msg.sender.id === user.uid}
+                  showReadStatus={msg.id === lastOwnMessageId}
+                  conversationId={conversationId}
+                  onMessageUpdated={(data) =>
+                    handleMessageUpdated(msg.id, data)
+                  }
+                />
+              ))}
+            </>
+          )}
+        </div>
+
+        <div className="border-t border-default-200 p-4">
+          <ChatInput
+            conversationId={conversationId}
+            onMessageSent={handleMessageSent}
+          />
+        </div>
+      </CardBody>
+    </Card>
+  )
+}

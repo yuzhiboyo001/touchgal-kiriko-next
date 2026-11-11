@@ -1,0 +1,31 @@
+import { z } from 'zod'
+import { prisma } from '~/prisma/index'
+import { recomputePatchRatingStat } from './stat'
+import { canDeleteRating } from '~/lib/permissions'
+
+const ratingIdSchema = z.object({
+  ratingId: z.coerce.number({ message: 'ID 不正确' }).min(1).max(9999999)
+})
+
+export const deletePatchRating = async (
+  input: z.infer<typeof ratingIdSchema>,
+  uid: number,
+  userRole: number
+) => {
+  const rating = await prisma.patch_rating.findUnique({
+    where: { id: input.ratingId }
+  })
+  if (!rating) {
+    return '评价不存在'
+  }
+
+  if (!canDeleteRating({ uid, role: userRole }, rating.user_id)) {
+    return '您没有权限删除该评价'
+  }
+
+  await prisma.patch_rating.delete({ where: { id: input.ratingId } })
+
+  await recomputePatchRatingStat(rating.patch_id)
+
+  return {}
+}

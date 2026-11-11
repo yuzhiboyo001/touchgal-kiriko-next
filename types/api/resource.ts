@@ -1,0 +1,29 @@
+export interface PatchResourceLinkSummary {
+  size: string
+}
+
+export interface PatchResource {
+  id: number
+  name: string
+  section: string
+  uniqueId: string
+  type: string[]
+  language: string[]
+  platform: string[]
+  primaryLink: PatchResourceLinkSummary | null
+  linkCount: number
+  likeCount: number
+  download: number
+  patchId: number
+  patchName: string
+  created: string
+  user: KunUser & {
+    patchCount: number
+    role: number
+  }
+}
+
+export interface ResourceListResponse {
+  resources: PatchResource[]
+  total: number
+}

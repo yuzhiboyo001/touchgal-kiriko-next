@@ -1,0 +1,49 @@
+# Copy this file to .env.local for local Next.js development.
+# Never commit real secrets.
+
+NODE_ENV=development
+TRUST_PROXY=true
+KUN_VISUAL_NOVEL_SITE_URL=http://localhost:3000
+
+# Shared with Python
+KUN_DATABASE_URL=postgresql://postgres:password@127.0.0.1:5432/kun_touchgal?schema=public
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+PYTHON_API_SECRET=replace-with-one-shared-random-secret
+FASTAPI_INTERNAL_URL=http://127.0.0.1:8000
+DLSITE_API_URL=http://127.0.0.1:8000/api/dlsite
+
+# Next public URLs
+NEXT_PUBLIC_KUN_PATCH_ADDRESS_DEV=http://localhost:3000
+NEXT_PUBLIC_KUN_PATCH_ADDRESS_PROD=https://your-domain.example
+NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_KUN_RANKING_IMAGE_BED_URL=https://img.kiriko.ink/ranking
+NEXT_PUBLIC_KUN_VISUAL_NOVEL_S3_STORAGE_URL=https://img.kiriko.ink/kun
+
+# Auth
+JWT_SECRET=replace-with-long-random-secret
+JWT_ISS=kiriko
+JWT_AUD=kiriko_admin
+
+# Email / storage / CDN
+SMTP_HOST=mail.kiriko.ink
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=noreply@kiriko.ink
+SMTP_PASS=replace-with-mail-password
+SMTP_FROM_EMAIL=noreply@kiriko.ink
+SMTP_FROM_NAME=Kiriko
+KUN_VISUAL_NOVEL_S3_STORAGE_ENDPOINT=
+KUN_VISUAL_NOVEL_S3_STORAGE_REGION=
+KUN_VISUAL_NOVEL_S3_STORAGE_ACCESS_KEY_ID=
+KUN_VISUAL_NOVEL_S3_STORAGE_SECRET_ACCESS_KEY=
+KUN_VISUAL_NOVEL_S3_STORAGE_BUCKET_NAME=kiriko-images
+KUN_VISUAL_NOVEL_IMAGE_BED_HOST=img.kiriko.ink
+KUN_VISUAL_NOVEL_IMAGE_BED_URL=https://img.kiriko.ink/kun
+KUN_CF_CACHE_ZONE_ID=
+KUN_CF_CACHE_PURGE_API_TOKEN=
+KUN_VISUAL_NOVEL_TEST_SITE_LABEL=DEV
+
+# Development only
+DLSITE_IMAGE_DEBUG=false

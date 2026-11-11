@@ -1,0 +1,26 @@
+'use server'
+
+import { z } from 'zod'
+import { getUserInfoSchema } from '~/validations/user'
+import { verifyHeaderCookie } from '~/utils/actions/verifyHeaderCookie'
+import { safeParseSchema } from '~/utils/actions/safeParseSchema'
+import { getPatchVisibilityWhere } from '~/utils/actions/getPatchVisibilityWhere'
+import { getUserPatchResource } from '~/app/api/user/profile/resource/service'
+
+export const kunGetActions = async (
+  params: z.infer<typeof getUserInfoSchema>
+) => {
+  const input = safeParseSchema(getUserInfoSchema, params)
+  if (typeof input === 'string') {
+    return input
+  }
+  const payload = await verifyHeaderCookie()
+  if (!payload) {
+    return '用户登陆失效'
+  }
+
+  const visibilityWhere = await getPatchVisibilityWhere()
+
+  const response = await getUserPatchResource(input, visibilityWhere)
+  return response
+}

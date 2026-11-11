@@ -1,0 +1,19 @@
+model kiriko_user_task {
+  id      String @id @default(cuid())
+  user_id Int
+  user    user   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  task_id      String
+  task_type    String // 'daily' | 'weekly' | 'challenge'
+  completed_at DateTime?
+  claimed      Boolean   @default(false)
+  date       DateTime  @default(now())
+  week_start DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, task_id])
+  @@index([user_id, task_type])
+  @@index([user_id, task_id])
+}
