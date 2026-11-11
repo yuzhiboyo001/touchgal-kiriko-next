@@ -1,5 +1,3 @@
-![Kiriko](./public/kiriko.avif)
-
 # Kiriko
 
 Kiriko 是一个面向 Galgame 爱好者的资源与交流站点，提供游戏资料、资源检索、社区补链和看板娘互动。
