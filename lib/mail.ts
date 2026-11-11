@@ -66,8 +66,7 @@ export const sendMail = async ({ to, subject, html, text }: SendMailInput) => {
             Text: { Data: text, Charset: 'UTF-8' }
           }
         },
-        ConfigurationSetName:
-          process.env.AWS_SES_CONFIGURATION_SET || undefined
+        ConfigurationSetName: process.env.AWS_SES_CONFIGURATION_SET || undefined
       })
     )
     return

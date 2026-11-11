@@ -79,8 +79,7 @@ export const ProfileOnlineDot = ({ userId }: { userId: number }) => {
       aria-label="当前在线"
       className="absolute -bottom-2 -right-6 z-10 inline-flex items-center gap-1 rounded-full bg-emerald-500 px-1.5 py-0.5 text-[11px] font-medium leading-none text-white"
     >
-      <span className="size-1.5 rounded-full bg-white/80" />
-      在 线
+      <span className="size-1.5 rounded-full bg-white/80" />在 线
     </span>
   )
 }

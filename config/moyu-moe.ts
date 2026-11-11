@@ -4,8 +4,7 @@ import type { KunSiteConfig } from './config'
 const KUN_SITE_NAME = 'Kiriko'
 const KUN_SITE_MENTION = '@galgame_gzwz'
 const KUN_SITE_TITLE = 'Kiriko - Galgame 游戏资料与社区'
-const KUN_SITE_IMAGE =
-  'https://img.kiriko.ink/kun/logo/kiriko-square.avif'
+const KUN_SITE_IMAGE = 'https://img.kiriko.ink/kun/logo/kiriko-square.avif'
 const KUN_SITE_DESCRIPTION =
   'Kiriko 是一个一站式 Galgame 文化社区，提供 Galgame 游戏资料、评测、资源、论坛与玩家交流。'
 const KUN_SITE_URL = 'https://kiriko.ink'
