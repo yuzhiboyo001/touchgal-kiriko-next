@@ -35,8 +35,7 @@ export const KunFooter = () => {
             </Link>
 
             <Link
-              // 以后改成自己的github仓库
-              href="https://github.com/KunMoe/kun-touchgal-next"
+              href="https://github.com/yuzhiboyo001/touchgal-kiriko-next"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center"
