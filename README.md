@@ -18,11 +18,25 @@ Kiriko 与原项目作者、官方团队没有隶属关系，也不代表原项�
 
 ## 本项目的主要改动
 
-- 登录用户在线状态与个人主页在线标识
-- 看板娘 AI 的分层调用与月度免费额度保护
-- Kiriko 支持者铭牌与每日聊天配额
-- 站点公告、使用指南和支持页面
 - Kiriko 的视觉与交互调整
+- 看板娘 LLM 相关功能与额度保护
+
+## Contributors
+
+感谢 TouchGal 及其上游项目的所有贡献者：
+
+- [Palentum](https://github.com/Palentum)
+- [KunMoe / KUN1007](https://github.com/KunMoe)
+- [json-q (JSQ)](https://github.com/json-q)
+- [SimonShiki](https://github.com/SimonShiki)
+- [nonhana (non_hana)](https://github.com/nonhana)
+- [flipwind](https://github.com/flipwind)
+- [TangTangChu (糖糖毬)](https://github.com/TangTangChu)
+- [Saul-Mirone](https://github.com/Saul-Mirone)
+- [asukaminato0721](https://github.com/asukaminato0721)
+- [yuzhiboyo001](https://github.com/yuzhiboyo001)（Kiriko 维护）
+
+没有你们的代码、文档、反馈和整理工作，就没有 TouchGal，也没有现在的 Kiriko。
 
 ## 本地运行
 
