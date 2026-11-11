@@ -16,10 +16,10 @@ Kiriko 是在 **TouchGal** 的基础上继续开发和个性化改造的二次�
 
 Kiriko 与原项目作者、官方团队没有隶属关系，也不代表原项目的官方立场。
 
-## 本项目的主要改动
+## 项目改动
 
 - Kiriko 的视觉与交互调整
-- 看板娘 LLM 相关功能与额度保护
+- 看板娘 LLM 相关功能
 
 ## Contributors
 
@@ -36,7 +36,6 @@ Kiriko 与原项目作者、官方团队没有隶属关系，也不代表原项�
 - [asukaminato0721](https://github.com/asukaminato0721)
 - [yuzhiboyo001](https://github.com/yuzhiboyo001)（Kiriko 维护）
 
-没有你们的代码、文档、反馈和整理工作，就没有 TouchGal，也没有现在的 Kiriko。
 
 ## 本地运行
 
